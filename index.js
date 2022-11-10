@@ -2,10 +2,11 @@ const { log } = require('console')
 const express = require('express')
 const cors = require('cors')
 const fs = require('fs')
-const { send } = require('process')
 const app = express()
 const port = 5050
+
 const names = ["lior","tal","nati","shlomo","nitay","bracha"]
+
 const students = [
     {f_name:"danie",l_name:"malede",id:1,age:25},
     {f_name:"lior",l_name:"david",id:2,age:26},
@@ -48,12 +49,16 @@ app.use(express.json({extended:true}))
 app.use(express.urlencoded({extended:true}))
 app.use(cors())
 
-function userindex(req) {
+function studentIndexFind(req) {
     const userId = students.find(user => user.id==req.params.id)
     const userIndex = students.indexOf(userId)
     return userIndex
 }
-
+function courseIndexFind(req) {
+    const courseId = courses.find(course => course.id==req.params.id)
+    const courseIndex = courses.indexOf(courseId)
+    return courseIndex
+}
 
 app.get('/',(req,res)=>{
     res.send('hello world')
@@ -100,7 +105,7 @@ app.get('/teachers',(req,res)=>{
 })
 
 app.put('/students/update/:id',(req,res)=>{
-    const theStudentIndex = userindex(req)
+    const theStudentIndex = studentIndexFind(req)
     if (theStudentIndex > -1) {
         students[theStudentIndex] = req.body.data
         return res.send(students)
@@ -108,7 +113,7 @@ app.put('/students/update/:id',(req,res)=>{
 })
 
 app.delete('/deleteStudent/:id',(req,res)=>{
-    const studentIndex = userindex(req)
+    const studentIndex = studentIndexFind(req)
     const removeStudent = students.splice(studentIndex,1)
     removeStudent ? res.send(students):res.send("has been some error in delete")
 })
@@ -122,6 +127,31 @@ app.post('/course/add',(req,res)=>{
     const data = req.body.data
     courses.push(data)
     res.send("hacourse nosaf")
+})
+
+app.put('/course/update/:id',(req,res)=>{
+    const courseIndex = courseIndexFind(req)
+    if(courseIndex>-1){
+        courses[courseIndex] = req.body.data
+    }
+    res.send('successfully add')
+})
+
+app.delete('/course/delete/:id',(req,res)=>{
+    const courseIndex = courseIndexFind(req)
+    const deletedCourse = courses.splice(courseIndex,1)
+    res.send(courses)
+})
+
+app.delete('/course/remove/:id',(req,res)=>{
+    const courseIndex = courseIndexFind(req)
+    const removedCourse = courses.splice(courseIndex,1)
+    res.send(courses)
+})
+
+app.get('/course/:id',(req,res)=>{
+    const getCourseByIndex = courses.find(course => course.id==req.params.id)
+    res.send(getCourseByIndex)
 })
 app.listen(port,()=>{
     log(`thats the server ${port}`)
