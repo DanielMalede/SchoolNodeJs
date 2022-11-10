@@ -2,18 +2,59 @@ const { log } = require('console')
 const express = require('express')
 const cors = require('cors')
 const fs = require('fs')
+const { send } = require('process')
 const app = express()
 const port = 5050
 const names = ["lior","tal","nati","shlomo","nitay","bracha"]
 const students = [
     {f_name:"danie",l_name:"malede",id:1,age:25},
     {f_name:"lior",l_name:"david",id:2,age:26},
-    {f_name:"natan",l_name:"belay",id:1,age:25},
-    {f_name:"abay",l_name:"asaye",id:1,age:27},
+    {f_name:"natan",l_name:"belay",id:3,age:25},
+    {f_name:"abay",l_name:"asaye",id:4,age:27},
+]
+const courses = [
+    {
+        id:1,
+        courseName:"tech",
+        img:"eyze tmona",
+        description:"teor colshehuu"
+    },
+    {
+        id:2,
+        courseName:"career",
+        img:"eyze tmona",
+        description:"teor colshehuu"
+    },
+    {
+        id:3,
+        courseName:"jon",
+        img:"eyze tmona",
+        description:"teor colshehuu"
+    },
+    {
+        id:4,
+        courseName:"brice",
+        img:"eyze tmona",
+        description:"teor colshehuu"
+    },
+    {
+        id:5,
+        courseName:"machsava",
+        img:"eyze tmona",
+        description:"teor colshehuu"
+    },
 ]
 app.use(express.json({extended:true}))
 app.use(express.urlencoded({extended:true}))
 app.use(cors())
+
+function userindex(req) {
+    const userId = students.find(user => user.id==req.params.id)
+    const userIndex = students.indexOf(userId)
+    return userIndex
+}
+
+
 app.get('/',(req,res)=>{
     res.send('hello world')
 })
@@ -56,6 +97,31 @@ app.get('/teachers',(req,res)=>{
         if(err) return res.send(err)
         res.send(data)
     })
+})
+
+app.put('/students/update/:id',(req,res)=>{
+    const theStudentIndex = userindex(req)
+    if (theStudentIndex > -1) {
+        students[theStudentIndex] = req.body.data
+        return res.send(students)
+    }
+})
+
+app.delete('/deleteStudent/:id',(req,res)=>{
+    const studentIndex = userindex(req)
+    const removeStudent = students.splice(studentIndex,1)
+    removeStudent ? res.send(students):res.send("has been some error in delete")
+})
+
+app.get('/course',(req,res)=>{
+    res.send(courses)
+    log("success")
+})
+
+app.post('/course/add',(req,res)=>{
+    const data = req.body.data
+    courses.push(data)
+    res.send("hacourse nosaf")
 })
 app.listen(port,()=>{
     log(`thats the server ${port}`)
