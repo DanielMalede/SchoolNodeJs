@@ -162,6 +162,7 @@ app.get("/course/:id", (req, res) => {
   const getCourseByIndex = courses.find((course) => course.id == req.params.id);
   res.send(getCourseByIndex);
 });
+
 app.listen(port, () => {
   log(`thats the server ${port}`);
 });
