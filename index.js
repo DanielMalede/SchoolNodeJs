@@ -10,6 +10,13 @@ function studentIndexFind(req) {
     const userIndex = students.indexOf(userId);
     return userIndex;
   }
+
+  function courseIndexFind(req) {
+    const courseId = courses.find((course) => course.id == req.params.id);
+    const courseIndex = courses.indexOf(courseId);
+    return courseIndex;
+  }
+  
 const names = ["lior", "tal", "nati", "shlomo", "nitay", "bracha"];
 
 const students = [
@@ -55,11 +62,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 
-function courseIndexFind(req) {
-  const courseId = courses.find((course) => course.id == req.params.id);
-  const courseIndex = courses.indexOf(courseId);
-  return courseIndex;
-}
 
 app.get("/", (req, res) => {
   res.send("hello world");
