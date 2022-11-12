@@ -6,17 +6,17 @@ const app = express();
 const port = 5050;
 
 function studentIndexFind(req) {
-    const userId = students.find((user) => user.id == req.params.id);
-    const userIndex = students.indexOf(userId);
-    return userIndex;
-  }
+  const userId = students.find((user) => user.id == req.params.id);
+  const userIndex = students.indexOf(userId);
+  return userIndex;
+}
 
-  function courseIndexFind(req) {
-    const courseId = courses.find((course) => course.id == req.params.id);
-    const courseIndex = courses.indexOf(courseId);
-    return courseIndex;
-  }
-  
+function courseIndexFind(req) {
+  const courseId = courses.find((course) => course.id == req.params.id);
+  const courseIndex = courses.indexOf(courseId);
+  return courseIndex;
+}
+
 const names = ["lior", "tal", "nati", "shlomo", "nitay", "bracha"];
 
 const students = [
@@ -60,8 +60,6 @@ const courses = [
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-
-
 
 app.get("/", (req, res) => {
   res.send("hello world");
