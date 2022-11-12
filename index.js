@@ -68,6 +68,7 @@ app.get('/names',(req,res)=>{
     res.send(names)
 })
 
+
 app.post('/newName',(req,res)=>{
     const data = req.body.data
     names.push(data)
